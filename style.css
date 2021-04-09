@@ -1,0 +1,9 @@
+body {
+    background-color: aquamarine;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.answerButtons {
+    padding: 1rem;
+}
