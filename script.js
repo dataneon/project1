@@ -1,27 +1,28 @@
 console.log("running")
 
 const answerButtons = document.querySelector(".answerButtons")
+let currentImage = document.querySelector("#currentPlantImage")
 
 // create object of questions with their answers
 const triviaQuestions = [
-    {"name": "plant1",
-    "family": "plant-family1",
-    "imageSource": "img/plant1.jpg"},
-    {"name": "plant2",
-    "family": "plant-family2",
-    "imageSource": "img/plant2.jpg"},
-    {"name": "plant3",
-    "family": "plant-family3",
-    "imageSource": "img/plant3.jpg"},
-    {"name": "plant4",
-    "family": "plant-family4",
-    "imageSource": "img/plant4.jpg"},
-    {"name": "plant5",
-    "family": "plant-family5",
-    "imageSource": "img/plant5.jpg"},
-    {"name": "plant6",
-    "family": "plant-family6",
-    "imageSource": "img/plant6.jpg"},
+    {"name": "Pine",
+    "family": "Pinaceae",
+    "imageSource": "img/pine.jpg"},
+    {"name": "Palm",
+    "family": "Arecaceae",
+    "imageSource": "img/palm.jpg"},
+    {"name": "Yucca brevifolia",
+    "family": "Asparagaceae",
+    "imageSource": "img/yucca.jpg"},
+    {"name": "Baobab",
+    "family": "Malvaceae",
+    "imageSource": "img/baobab.jpg"},
+    {"name": "Oak",
+    "family": "Fagaceae",
+    "imageSource": "img/oak.jpg"},
+    {"name": "Bog Birch",
+    "family": "Betulaceae",
+    "imageSource": "img/bogbirch.jpg"},
 ]
 
 // wrong answers to fill in the other buttons
@@ -45,7 +46,6 @@ const resetButton = document.getElementById("resetButton")
 // event listeners for button clicks
 answerButtons.addEventListener("click", userClick)
 resetButton.addEventListener("click", reset)
-
 
 // action to take once a user clicks on an answer
 function userClick(e) {
@@ -75,6 +75,9 @@ function newQuestion() {
     let currentFamily = currentPlant.family
 
     // load image
+    // currentImage.src = "img/pine.jpg"
+    currentImage.src = currentImgSrc
+
 
     // load correct answer into one of the buttons
     let answerArray = [null, null, null, null]
@@ -84,6 +87,13 @@ function newQuestion() {
 
     // place the currentFamily variable randomly in the answerArray
     answerArray[randAnsIndex] = currentFamily
+
+    console.log(answerArray)
+
+    // load wrong answers into the remaining buttons
+}
+
+
 
     // returns an array of 3 nonidentical, wrong answers
     // function fillCurrentWrongAnswers(){
@@ -117,50 +127,45 @@ function newQuestion() {
     //     }
     // }
 
-    console.log(answerArray)
-
-    // load wrong answers into the remaining buttons
-}
-
-function threeWrongAnswers(){
-    function rThree (wrongArr) {
-        if (wrongArr.length = 3) {
-            return wrongArr
-        } else {
-            let randWrongAnswerIndex = Math.floor(Math.random() * wrongAnswers.length)
-            let randWrongAnswer = wrongAnswers[randWrongAnswerIndex]
-            if (wrongArr.includes(randWrongAnswer) == false) {
-                wrongArr.push(randWrongAnswer)
-                return rThree(wrongArr)
-            } else if (wrongArr.includes(randWrongAnswer) == true) {
-                return rThree(wrongArr)
-            }
-        }
-    }
-    return rThree([])
-}
+// function threeWrongAnswers(){
+//     function rThree (wrongArr) {
+//         if (wrongArr.length = 3) {
+//             return wrongArr
+//         } else {
+//             let randWrongAnswerIndex = Math.floor(Math.random() * wrongAnswers.length)
+//             let randWrongAnswer = wrongAnswers[randWrongAnswerIndex]
+//             if (wrongArr.includes(randWrongAnswer) == false) {
+//                 wrongArr.push(randWrongAnswer)
+//                 return rThree(wrongArr)
+//             } else if (wrongArr.includes(randWrongAnswer) == true) {
+//                 return rThree(wrongArr)
+//             }
+//         }
+//     }
+//     return rThree([])
+// }
 
 // trying to rewrite threeWrongAnswers() in the most basic way
-function threeNonidenticalItems(){
-    let myArr = ["a", "b", "c", "d", "e", "f", "g"]
-    function rThree (newArr) {
-        if (newArr.length == 3) {
-            return newArr
-        } else {
-            let randIndex = Math.floor(Math.random() * myArr.length)
-            let randItem = myArr[randIndex]
-            if (newArr.includes(randItem) == false) {
-                newArr.push(randItem)
-                return rThree(newArr)
-            } else if (newArr.includes(randItem) == true) {
-                return rThree(newArr)
-            } else {
-                console.log("something went wrong")
-            }
-        }
-    }
-    rThree([])
-}
+// function threeNonidenticalItems(){
+//     let myArr = ["a", "b", "c", "d", "e", "f", "g"]
+//     function rThree (newArr) {
+//         if (newArr.length == 3) {
+//             return newArr
+//         } else {
+//             let randIndex = Math.floor(Math.random() * myArr.length)
+//             let randItem = myArr[randIndex]
+//             if (newArr.includes(randItem) == false) {
+//                 newArr.push(randItem)
+//                 return rThree(newArr)
+//             } else if (newArr.includes(randItem) == true) {
+//                 return rThree(newArr)
+//             } else {
+//                 console.log("something went wrong")
+//             }
+//         }
+//     }
+//     rThree([])
+// }
 
 // get API information
 
