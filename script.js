@@ -1,26 +1,26 @@
-console.log("running")
-
+// define DOM elements
 const answerButtons = document.querySelector(".answerButtons")
 let currentImage = document.querySelector("#currentPlantImage")
+let plantName = document.querySelector("#plantName")
 
-// create object of questions with their answers
+// define object of questions with their answers
 const triviaQuestions = [
-    {"name": "Pine",
+    {"name": "Pine tree",
     "family": "Pinaceae",
     "imageSource": "img/pine.jpg"},
-    {"name": "Palm",
+    {"name": "Palm tree",
     "family": "Arecaceae",
     "imageSource": "img/palm.jpg"},
-    {"name": "Yucca brevifolia",
+    {"name": "Joshua tree",
     "family": "Asparagaceae",
     "imageSource": "img/yucca.jpg"},
-    {"name": "Baobab",
+    {"name": "Baobab tree",
     "family": "Malvaceae",
     "imageSource": "img/baobab.jpg"},
-    {"name": "Oak",
+    {"name": "Oak tree",
     "family": "Fagaceae",
     "imageSource": "img/oak.jpg"},
-    {"name": "Bog Birch",
+    {"name": "Bog Birch tree",
     "family": "Betulaceae",
     "imageSource": "img/bogbirch.jpg"},
 ]
@@ -28,12 +28,16 @@ const triviaQuestions = [
 // wrong answers to fill in the other buttons
 let wrongAnswers = [
     "Murphyfus",
-    "Pine",
-    "Apples",
-    "Rose",
+    "Pinaceae",
+    "Applicaea",
+    "Rosecea",
     "Aquinas",
-    "Rabbits",
-    "Snake oil"
+    "Confucius",
+    "Snakephus",
+    "Malvaceae",
+    "Betulaceae",
+    "Asparagaceae",
+    "Arecaceae",
 ]
 
 // define buttons
@@ -42,16 +46,18 @@ const buttonB = document.getElementById("buttonB")
 const buttonC = document.getElementById("buttonC")
 const buttonD = document.getElementById("buttonD")
 const resetButton = document.getElementById("resetButton")
+const newQButton = document.getElementById("newQuestion")
 
 // event listeners for button clicks
 answerButtons.addEventListener("click", userClick)
 resetButton.addEventListener("click", reset)
+newQButton.addEventListener("click", newQuestion)
 
 // action to take once a user clicks on an answer
 function userClick(e) {
     const currentButton = document.getElementById(e.target.id)
 
-    // only do something if a button is pressed
+    // print which button has been pressed for dev purposes
     if (e.target.tagName == "BUTTON") {
         console.log(`currentButton = ${currentButton.id}`)
     }
@@ -67,7 +73,7 @@ function reset(e) {
 }
 
 function newQuestion() {
-    // define current plantObj
+    // define current plant's attributes
     let randArrIndex = Math.floor(Math.random() * triviaQuestions.length)
     let currentPlant = triviaQuestions[randArrIndex]
     let currentName = currentPlant.name
@@ -75,11 +81,12 @@ function newQuestion() {
     let currentFamily = currentPlant.family
 
     // load image
-    // currentImage.src = "img/pine.jpg"
     currentImage.src = currentImgSrc
 
+    // load current name of plant into span
+    plantName.innerText = currentName
 
-    // load correct answer into one of the buttons
+    // create array with 4 nulls
     let answerArray = [null, null, null, null]
 
     // random num for placement of answer in answerArray
@@ -88,115 +95,54 @@ function newQuestion() {
     // place the currentFamily variable randomly in the answerArray
     answerArray[randAnsIndex] = currentFamily
 
+    // get array of 4 random wrong answers, 4 because one might be identical to correct answer
+    fourWrongAnswers = fillCurrentWrongAnswers(wrongAnswers)
+
+    // add wrong answers without overwriting the correct answer
     for (let i = 0; i < answerArray.length; i++) {
-        // if ((answerArray[i] != null) && (answerArray[i] != currentFamily)) {
+        // add a wrong answer if i is null and i is not the answer
         if (answerArray[i] == null && answerArray[i] !== currentFamily) {
-            answerArray[i] = wrongAnswers[i]
+            answerArray[i] = fourWrongAnswers[i]
         }
     }
-    // answerArray[1] = "Tester"
 
-
-
+    // populate buttons with the answer array
     fillButtons(answerArray)
 
     console.log(answerArray)
-
-    // load wrong answers into the remaining buttons
 }
 
 // fill answers buttons
 function fillButtons(answerArr){
-    // let tempArr = ["Square", "Skone", "Single", "Piniferous"]
-    // let buttonsArr = [buttonA, buttonB, buttonC, buttonD]
-    // for (let i = 0; i < 4; i++) {
-    //     buttonsArr[i].value.innerText = answerArr[i]
-    //     console.log(buttonsArr[i])
-    // }
     buttonA.innerText = answerArr[0]
     buttonB.innerText = answerArr[1]
     buttonC.innerText = answerArr[2]
     buttonD.innerText = answerArr[3]
-
 }
 
+// return 4 nonidentical incorrect answers using wrongsArr argument
+// 4 because one might be identical to correct answer
+function fillCurrentWrongAnswers(wrongsArr){
+    function rFour (newArr) {
+        if (newArr.length == 4) {
+            return newArr
+        } else {
+            let randIndex = Math.floor(Math.random() * wrongsArr.length)
+            let randItem = wrongsArr[randIndex]
+            if (newArr.includes(randItem) == false) {
+                newArr.push(randItem)
+                return rFour(newArr)
+            } else if (newArr.includes(randItem) == true) {
+                return rFour(newArr) 
+            } else {
+                console.log("something went wrong")
+            }
+        }
+    }
+    return rFour([])
+}
+
+// load initial question to begin
 newQuestion()
 
-
-
-
-    // returns an array of 3 nonidentical, wrong answers
-    // function fillCurrentWrongAnswers(){
-    //     function rFill (i, currentWrongAnswers) {
-    //         if (currentWrongAnswers.includes(null) == false) {
-    //             return currentWrongAnswers
-    //         } else {
-    //             let randWrongAnswer = wrongAnswers[Math.floor(Math.random() * wrongAnswers.length)]
-    //             if ((currentWrongAnswers[i] == null) && 
-    //                 (currentWrongAnswers.includes(randWrongAnswer) == false)) {
-    //                 currentWrongAnswers[i] = randWrongAnswer
-    //                 return rFill(i + 1, currentWrongAnswers)
-    //             }
-    //         }
-    //     }
-    //     return rFill(0, [null, null, null])
-    // }
-
-    // make array of 3 wrong answers that are nonidentical
-    // currentWrongAnswers = fillCurrentWrongAnswers()
-
-    // console.log(`currentWrongAnswers: ${currentWrongAnswers}`)
-
-    // add the incorrect answers to the answerArray
-    // this sometimes works and sometimes causes an error
-    // I think the error is caused by somehow removing too many items from the list
-    // for (let i = 0; i < answerArray.length; i++) {
-    //     if (answerArray[i] == null) {
-    //         answerArray[i] = currentWrongAnswers[currentWrongAnswers.length - 1]
-    //         currentWrongAnswers.pop()
-    //     }
-    // }
-
-// function threeWrongAnswers(){
-//     function rThree (wrongArr) {
-//         if (wrongArr.length = 3) {
-//             return wrongArr
-//         } else {
-//             let randWrongAnswerIndex = Math.floor(Math.random() * wrongAnswers.length)
-//             let randWrongAnswer = wrongAnswers[randWrongAnswerIndex]
-//             if (wrongArr.includes(randWrongAnswer) == false) {
-//                 wrongArr.push(randWrongAnswer)
-//                 return rThree(wrongArr)
-//             } else if (wrongArr.includes(randWrongAnswer) == true) {
-//                 return rThree(wrongArr)
-//             }
-//         }
-//     }
-//     return rThree([])
-// }
-
-// trying to rewrite threeWrongAnswers() in the most basic way
-// function threeNonidenticalItems(){
-//     let myArr = ["a", "b", "c", "d", "e", "f", "g"]
-//     function rThree (newArr) {
-//         if (newArr.length == 3) {
-//             return newArr
-//         } else {
-//             let randIndex = Math.floor(Math.random() * myArr.length)
-//             let randItem = myArr[randIndex]
-//             if (newArr.includes(randItem) == false) {
-//                 newArr.push(randItem)
-//                 return rThree(newArr)
-//             } else if (newArr.includes(randItem) == true) {
-//                 return rThree(newArr)
-//             } else {
-//                 console.log("something went wrong")
-//             }
-//         }
-//     }
-//     rThree([])
-// }
-
 // get API information
-
-
