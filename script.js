@@ -2,27 +2,32 @@
 const answerButtons = document.querySelector(".answerButtons")
 let currentImage = document.querySelector("#currentPlantImage")
 let plantName = document.querySelector("#plantName")
+let scoreSpan = document.querySelector("#scoreSpan")
+let scoreNum = 0
 
 // define object of questions with their answers
 const triviaQuestions = [
-    {"name": "Pine tree",
+    {"name": "pine tree",
     "family": "Pinaceae",
     "imageSource": "img/pine.jpg"},
-    {"name": "Palm tree",
+    {"name": "palm tree",
     "family": "Arecaceae",
     "imageSource": "img/palm.jpg"},
-    {"name": "Joshua tree",
+    {"name": "joshua tree",
     "family": "Asparagaceae",
     "imageSource": "img/yucca.jpg"},
-    {"name": "Baobab tree",
+    {"name": "baobab tree",
     "family": "Malvaceae",
     "imageSource": "img/baobab.jpg"},
-    {"name": "Oak tree",
+    {"name": "oak tree",
     "family": "Fagaceae",
     "imageSource": "img/oak.jpg"},
-    {"name": "Bog Birch tree",
+    {"name": "bog birch tree",
     "family": "Betulaceae",
     "imageSource": "img/bogbirch.jpg"},
+    {"name": "beavertail pricklypear",
+    "family": "Cactaceae",
+    "imageSource": "img/beavertail.jpg"},
 ]
 
 // wrong answers to fill in the other buttons
@@ -38,6 +43,7 @@ let wrongAnswers = [
     "Betulaceae",
     "Asparagaceae",
     "Arecaceae",
+    "Cactaceae",
 ]
 
 // define buttons
@@ -49,19 +55,8 @@ const resetButton = document.getElementById("resetButton")
 const newQButton = document.getElementById("newQuestion")
 
 // event listeners for button clicks
-answerButtons.addEventListener("click", userClick)
 resetButton.addEventListener("click", reset)
 newQButton.addEventListener("click", newQuestion)
-
-// action to take once a user clicks on an answer
-function userClick(e) {
-    const currentButton = document.getElementById(e.target.id)
-
-    // print which button has been pressed for dev purposes
-    if (e.target.tagName == "BUTTON") {
-        console.log(`currentButton = ${currentButton.id}`)
-    }
-}
 
 // reset the game
 function reset(e) {
@@ -72,6 +67,10 @@ function reset(e) {
     console.log("Reset button pressed")
 }
 
+// choose 10 nonidentical items from trivia object for the game to work through
+let tenQuestions = []
+
+// get new question, load image, load buttons
 function newQuestion() {
     // define current plant's attributes
     let randArrIndex = Math.floor(Math.random() * triviaQuestions.length)
@@ -79,6 +78,9 @@ function newQuestion() {
     let currentName = currentPlant.name
     let currentImgSrc = currentPlant.imageSource
     let currentFamily = currentPlant.family
+
+    // event listener for answerButtons
+    answerButtons.addEventListener("click", userClick)
 
     // load image
     currentImage.src = currentImgSrc
@@ -101,15 +103,32 @@ function newQuestion() {
     // add wrong answers without overwriting the correct answer
     for (let i = 0; i < answerArray.length; i++) {
         // add a wrong answer if i is null and i is not the answer
+        // right now this is still adding replicant items
         if (answerArray[i] == null && answerArray[i] !== currentFamily) {
-            answerArray[i] = fourWrongAnswers[i]
+             answerArray[i] = fourWrongAnswers[i]
         }
     }
 
+    // TODO write the above for loop as a recursive function
+
     // populate buttons with the answer array
     fillButtons(answerArray)
-
     console.log(answerArray)
+
+    // action to take once a user clicks on an answer
+    function userClick(e) {
+        const currentButton = document.getElementById(e.target.id)
+        // print which button has been pressed for dev purposes
+        if (e.target.tagName == "BUTTON") {
+            // console.log(`currentButton = ${currentButton.id}`)
+            console.log(`currentButton's innerText = ${currentButton.innerText}`)
+            if (currentButton.innerText == currentFamily) {
+                alert(`correct: ${currentButton.innerText}!`)
+                scoreNum += 10
+                scoreSpan.innerText = scoreNum
+            }
+        }
+    }
 }
 
 // fill answers buttons
@@ -144,5 +163,3 @@ function fillCurrentWrongAnswers(wrongsArr){
 
 // load initial question to begin
 newQuestion()
-
-// get API information
