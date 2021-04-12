@@ -27,7 +27,7 @@ const triviaQuestions = [
 
 // wrong answers to fill in the other buttons
 let wrongAnswers = [
-    "Murphy's Oil Soap",
+    "Murphyfus",
     "Pine",
     "Apples",
     "Rose",
@@ -88,10 +88,40 @@ function newQuestion() {
     // place the currentFamily variable randomly in the answerArray
     answerArray[randAnsIndex] = currentFamily
 
+    for (let i = 0; i < answerArray.length; i++) {
+        // if ((answerArray[i] != null) && (answerArray[i] != currentFamily)) {
+        if (answerArray[i] == null && answerArray[i] !== currentFamily) {
+            answerArray[i] = wrongAnswers[i]
+        }
+    }
+    // answerArray[1] = "Tester"
+
+
+
+    fillButtons(answerArray)
+
     console.log(answerArray)
 
     // load wrong answers into the remaining buttons
 }
+
+// fill answers buttons
+function fillButtons(answerArr){
+    // let tempArr = ["Square", "Skone", "Single", "Piniferous"]
+    // let buttonsArr = [buttonA, buttonB, buttonC, buttonD]
+    // for (let i = 0; i < 4; i++) {
+    //     buttonsArr[i].value.innerText = answerArr[i]
+    //     console.log(buttonsArr[i])
+    // }
+    buttonA.innerText = answerArr[0]
+    buttonB.innerText = answerArr[1]
+    buttonC.innerText = answerArr[2]
+    buttonD.innerText = answerArr[3]
+
+}
+
+newQuestion()
+
 
 
 
