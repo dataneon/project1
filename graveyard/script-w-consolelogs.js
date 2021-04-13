@@ -92,7 +92,7 @@ let scoreNum = 0
 let questionCount = 0
 let userHasAnswered = false
 
-// global family name, initially set to empty string
+// global family name
 let famName = ""
 
 // reset the game
@@ -119,25 +119,6 @@ function reset(e) {
 
     // call new question
     newQuestion(tenQuestions.pop())
-}
-
-// return `amount` of randomly selected, nonidentical items from `myArr`
-function returnRandomNonidenticalItems(amount, myArr) {
-    function rNon (newArr) {
-        if (newArr.length == amount) {
-            return newArr
-        } else {
-            let randIndex = Math.floor(Math.random() * myArr.length)
-            let randItem = myArr[randIndex]
-            if (newArr.includes(randItem) == false) {
-                newArr.push(randItem)
-                return rNon(newArr)
-            } else if (newArr.includes(randItem) == true) {
-                return rNon(newArr)
-            }
-        }
-    }
-    return rNon([])
 }
 
 // choose 10 nonidentical items from trivia object for the game to work through
@@ -195,11 +176,12 @@ function newQuestion(question) {
 
     // place the question's family value randomly in the answerArray
     answerArray[randAnsIndex] = question.family
+    console.log(answerArray)
 
     // array of all families, excluding the question's family
     let allWrongAnswers = allFamilies.filter(str => str != question.family)
 
-    // get array of 4 random wrong answers
+    // get array of 4 random wrong answers, 4 because one might be identical to correct answer
     let fourWrongAnswers = returnRandomNonidenticalItems(4, allWrongAnswers)
 
     // for loop to add fourWrongAnswers into the null spots
@@ -208,6 +190,7 @@ function newQuestion(question) {
             continue
         } else if (answerArray[i] == null) {
             answerArray[i] = fourWrongAnswers.pop()
+            console.log(answerArray)
         }
     }
 
@@ -225,7 +208,9 @@ function newQuestion(question) {
     // action to take once a user clicks on an answer
     function userClick(e) {
         if (e.target.tagName == "BUTTON") {
+            console.log(e.target.innerText)
             if (e.target.innerText == famName && userHasAnswered == false) {
+                console.log(`question family = ${question.family}`)
                 userHasAnswered = true
                 scoreNum += 10
                 scoreSpan.innerText = scoreNum
@@ -238,6 +223,25 @@ function newQuestion(question) {
             }
         }
     }
+
+// return `amount` of randomly selected, nonidentical items from `myArr`
+function returnRandomNonidenticalItems(amount, myArr) {
+    function rNon (newArr) {
+        if (newArr.length == amount) {
+            return newArr
+        } else {
+            let randIndex = Math.floor(Math.random() * myArr.length)
+            let randItem = myArr[randIndex]
+            if (newArr.includes(randItem) == false) {
+                newArr.push(randItem)
+                return rNon(newArr)
+            } else if (newArr.includes(randItem) == true) {
+                return rNon(newArr)
+            }
+        }
+    }
+    return rNon([])
+}
 
 // function to end the game, alter the screen
 function gameOver(){

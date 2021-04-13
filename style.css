@@ -8,7 +8,7 @@ body {
 
 .buttons {
     padding: 1rem;
-    width: 25%;
+    width: 30%;
     height: 50%;
     font-family: 'Exo', sans-serif;
     border-radius: 8px;
@@ -45,7 +45,8 @@ p {
 }
 
 footer {
+    margin-top: 50px;
     display: flex;
     justify-content: center;
-    font-size: 8px;
+    font-size: 0.60rem;
 }
