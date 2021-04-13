@@ -5,27 +5,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href ="style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Exo&display=swap" rel="stylesheet">
     <title>Document</title>
 </head>
 <body>
     <h1>Plants and Their Families</h1>
-    <h2>Question <span id="questionCount"></span> of 10</h2>
+    <h2 id="questionCountHeader">Question <span id="questionCount"></span> of 10</h2>
     <h2>Score: <span id="scoreSpan"></span></h2>
     <img id="currentPlantImage" src="">
     <h3 id="currentQuestion">To which family does <span id="plantName"></span> belong?</h3>
     <p id="gameResponse"> </p>
     <div class="answerButtons">
         <div id="row1">
-            <button id="buttonA"></button>
-            <button id="buttonB"></button>
+            <button id="buttonA" class="buttons"></button>
+            <button id="buttonB" class="buttons"></button>
         </div>
         <div id="row2">
-            <button id="buttonC"></button>
-            <button id="buttonD"></button>
+            <button id="buttonC" class="buttons"></button>
+            <button id="buttonD" class="buttons"></button>
         </div>
     </div>
-    <button id="resetButton">Reset</button>
-    <button id="newQuestion">Next Question</button>
+    <button id="resetButton" class="buttons">Reset</button>
+    <button id="newQuestion" class="buttons">Next Question</button>
+    <h2 id="gameOverHeader"></h2>
+    <footer>
+        <p>All plant images sourced from Wikipedia // Designed by LS</p>
+    </footer>
     <script src="script.js"></script>
 </body>
 </html>

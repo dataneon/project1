@@ -6,6 +6,8 @@ let plantName = document.querySelector("#plantName")
 let scoreSpan = document.querySelector("#scoreSpan")
 let currentQuestion = document.querySelector("#currentQuestion")
 let questionCountSpan = document.querySelector("#questionCount")
+let questionCountHeader = document.querySelector("#questionCountHeader")
+let gameOverHeader = document.querySelector("#gameOverHeader")
 
 // define object of questions with their answers
 let triviaQuestions = [
@@ -90,6 +92,9 @@ let scoreNum = 0
 let questionCount = 0
 let userHasAnswered = false
 
+// global family name
+let famName = ""
+
 // reset the game
 function reset(e) {
     // reset score
@@ -103,7 +108,16 @@ function reset(e) {
     // load 10 new questions
     tenQuestions = returnRandomNonidenticalItems(10, triviaQuestions)
 
-    // go to new question
+    // hide game-over header
+    gameOverHeader.innerText = ""
+
+    // show current question and buttons
+    currentQuestion.style.visibility = "visible"
+    questionCountHeader.style.visibility = "visible"
+    answerButtons.style.visibility = "visible"
+    newQButton.style.visibility = "visible"
+
+    // call new question
     newQuestion(tenQuestions.pop())
     console.log("Reset button pressed")
 }
@@ -116,9 +130,6 @@ function loadNextQuestion(){
     let nextQuestion = tenQuestions.pop()
     return newQuestion(nextQuestion)
 }
-
-// global family name
-let famName = ""
 
 // get new question, load image, load buttons
 function newQuestion(question) {
@@ -239,11 +250,16 @@ function returnRandomNonidenticalItems(amount, myArr) {
     return rNon([])
 }
 
+// function to end the game, alter the screen
 function gameOver(){
     currentImage.src = "img/raintree.gif"
-    currentQuestion.innerText = "Game Over"
+    // hide question and buttons
+    currentQuestion.style.visibility = "hidden"
+    questionCountHeader.style.visibility = "hidden"
+    answerButtons.style.visibility = "hidden"
+    newQButton.style.visibility = "hidden"
 
-    // remove buttons except for reset
+    gameOverHeader.innerText = "GAME OVER"
 }
 
 // load initial question to begin
