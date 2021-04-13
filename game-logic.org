@@ -1,6 +1,0 @@
-* Game logic
-** load 10 nonidentical questions
-** Pass question via `.pop()` into newQuestion()
-** New question takes that question's attributes as new values
-** When question is completed, pass next question into newQuestion()
-
