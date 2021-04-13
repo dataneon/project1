@@ -1,5 +1,6 @@
 # Plants and Their Families
-This game quizes you on your knowledge of plants and their familties. The trivia will be accompanied by images of the respective plants.
+This game quizes you on your knowledge of plants and their familties. The trivia will be accompanied by images of the respective plants. The game's site is hosted at https://dataneon.github.io/project1/
+
 ## Working product
 ![image of product](https://i.imgur.com/2QxEiSd.jpg)
 
@@ -9,7 +10,7 @@ This game quizes you on your knowledge of plants and their familties. The trivia
 * Javascript
 
 ## Installation instructions
-No installation necessary.
+No installation necessary. Just visit https://dataneon.github.io/project1/
 
 ## User stories
 * As a user, I want to look at a site that is clean and easy to read.
