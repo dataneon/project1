@@ -1,9 +1,15 @@
 body {
-    background-color: aquamarine;
+    background-color: darkseagreen;
     text-align: center;
     margin: 0 auto;
+    font-family: sans-serif;
 }
 
 .answerButtons {
     padding: 1rem;
+}
+
+img {
+    border: 7px solid white;
+    border-radius: 66px;
 }

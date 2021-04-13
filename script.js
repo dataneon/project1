@@ -4,7 +4,8 @@ let answerButtons = document.querySelector(".answerButtons")
 let currentImage = document.querySelector("#currentPlantImage")
 let plantName = document.querySelector("#plantName")
 let scoreSpan = document.querySelector("#scoreSpan")
-let scoreNum = 0
+let currentQuestion = document.querySelector("#currentQuestion")
+let questionCountSpan = document.querySelector("#questionCount")
 
 // define object of questions with their answers
 let triviaQuestions = [
@@ -65,32 +66,16 @@ let triviaQuestions = [
     {"name": "a watermelon plant",
     "family": "Cucurbitaceae",
     "imageSource": "img/watermelon.jpg"},
-    {"name": "star fruit tree",
+    {"name": "a star fruit tree",
     "family": "Oxalidaceae",
     "imageSource": "img/starfruit.jpg"},
 ]
 
-// wrong answers to fill in the other buttons
-let wrongAnswers = [
-    "Murphyfus",
-    "Pinaceae",
-    "Applicaea",
-    "Aquinas",
-    "Confucius",
-    "Snakephus",
-    "Malvaceae",
-    "Betulaceae",
-    "Asparagaceae",
-    "Arecaceae",
-    "Cactaceae",
-    "Papaveraceae",
-    "Poaceae",
-    "Fabaceae",
-    "Myrtaceae",
-    "Salicaceae",
-    "Sapindaceae",
-    "Anacardiaceae",
-]
+// define array of all families
+let allFamilies = []
+for (let i = 0; i < triviaQuestions.length; i++) {
+    allFamilies.push(triviaQuestions[i].family)
+}
 
 // define buttons
 const buttonA = document.getElementById("buttonA")
@@ -100,36 +85,78 @@ const buttonD = document.getElementById("buttonD")
 const resetButton = document.getElementById("resetButton")
 const newQButton = document.getElementById("newQuestion")
 
-// event listeners for button clicks
-resetButton.addEventListener("click", reset)
-newQButton.addEventListener("click", newQuestion)
+// global variables that are altered
+let scoreNum = 0
+let questionCount = 0
+let userHasAnswered = false
 
 // reset the game
 function reset(e) {
     // reset score
+    scoreNum = 0
+    scoreSpan.innerText = scoreNum
+
     // reset question counter
+    questionCount = 0
+    questionCountSpan.innerText = questionCount
+
+    // load 10 new questions
+    tenQuestions = returnRandomNonidenticalItems(10, triviaQuestions)
+
     // go to new question
-    newQuestion()
+    newQuestion(tenQuestions.pop())
     console.log("Reset button pressed")
 }
 
 // choose 10 nonidentical items from trivia object for the game to work through
-let tenQuestions = []
+let tenQuestions = returnRandomNonidenticalItems(10, triviaQuestions)
+
+// function to load next question
+function loadNextQuestion(){
+    let nextQuestion = tenQuestions.pop()
+    return newQuestion(nextQuestion)
+}
+
+// global family name
+let famName = ""
 
 // get new question, load image, load buttons
+function newQuestion(question) {
+    famName = ""
+    console.log(question)
+    // reset game response
+    gameResponse.innerText = ``
 
-function newQuestion() {
+    // reset userHasAnswered
+    userHasAnswered = false
+
+    // add 1 to questionCount
+    questionCount += 1
+    questionCountSpan.innerText = `${questionCount}`
+
+    // if statement to end the game
+    if (questionCount < 11) {
+        console.log(`questionCount: ${questionCount}`)
+    } else if (questionCount >= 11) {
+        console.log("Game over")
+        return gameOver()
+    }
+
+    // show score
+    scoreSpan.innerText = scoreNum
 
     // define current plant's attributes
-    let randArrIndex = Math.floor(Math.random() * triviaQuestions.length)
-    let currentPlant = triviaQuestions[randArrIndex]
-    let currentName = currentPlant.name
-    let currentImgSrc = currentPlant.imageSource
-    let currentFamily = currentPlant.family
-    console.log(`current family: ${currentFamily}`)
+    let currentName = question.name
+    let currentImgSrc = question.imageSource
+    // let currentFamily = question.family
+    famName = question.family
+    
+    console.log(`current family: ${question.family}`)
 
-    // event listener for answerButtons
+    // event listeners for button clicks
     answerButtons.addEventListener("click", userClick)
+    resetButton.addEventListener("click", reset)
+    newQButton.addEventListener("click", loadNextQuestion)
 
     // load image
     currentImage.src = currentImgSrc
@@ -143,27 +170,32 @@ function newQuestion() {
     // random num for placement of answer in answerArray
     let randAnsIndex = Math.floor(Math.random() * answerArray.length)
 
-    // place the currentFamily variable randomly in the answerArray
-    answerArray[randAnsIndex] = currentFamily
+    // place the question's family value randomly in the answerArray
+    answerArray[randAnsIndex] = question.family
     console.log(answerArray)
 
+    // array of all families, excluding the question's family
+    let allWrongAnswers = allFamilies.filter(str => str != question.family)
+
     // get array of 4 random wrong answers, 4 because one might be identical to correct answer
-    let fourWrongAnswers = fillCurrentWrongAnswers(wrongAnswers)
+    let fourWrongAnswers = returnRandomNonidenticalItems(4, allWrongAnswers)
 
-    // the wrong answers could also be gathered by getting all the family names
-    // and excluding the name of the current plant
-
-    // define array of wrong answers that does not include the answer
-    let filteredWrongAnswers = fourWrongAnswers.filter(str => str != currentFamily)
-
-    // for loop to add filteredWrongAnswers into the null spots
+    // for loop to add fourWrongAnswers into the null spots
     for (let i = 0; i < 4; i++) {
-        if (answerArray[i] == currentFamily) {
+        if (answerArray[i] == question.family) {
             continue
         } else if (answerArray[i] == null) {
-            answerArray[i] = filteredWrongAnswers.pop()
+            answerArray[i] = fourWrongAnswers.pop()
             console.log(answerArray)
         }
+    }
+
+    // function to fill answers buttons
+    function fillButtons(answerArr){
+        buttonA.innerText = answerArr[0]
+        buttonB.innerText = answerArr[1]
+        buttonC.innerText = answerArr[2]
+        buttonD.innerText = answerArr[3]
     }
 
     // populate buttons with the answer array
@@ -171,52 +203,48 @@ function newQuestion() {
 
     // action to take once a user clicks on an answer
     function userClick(e) {
-        let currentButton = document.getElementById(e.target.id)
         if (e.target.tagName == "BUTTON") {
-            console.log(`currentButton's innerText = ${currentButton.innerText}`)
-            if (currentButton.innerText == currentFamily) {
-               alert(`correct: ${currentButton.innerText}!`)
+            console.log(e.target.innerText)
+            if (e.target.innerText == famName && userHasAnswered == false) {
+                console.log(`question family = ${question.family}`)
+                userHasAnswered = true
                 scoreNum += 10
                 scoreSpan.innerText = scoreNum
-                // return newQuestion()
-                // for some reason the program is remembering the previous currentFamily
-            } else if (currentButton.innerText != currentFamily) {
-                alert(`Incorrect. The correct answer is ${currentFamily}`)
-                // return newQuestion()
+                gameResponse.innerText = `That is correct: ${famName}`
+            } else if (e.target.innerText != famName && userHasAnswered == false) {
+                userHasAnswered = true
+                scoreSpan.innerText = scoreNum
+                gameResponse.innerText = `That is incorrect. Correct answer: ${famName}`
                 }
             }
         }
     }
 
-// fill answers buttons
-function fillButtons(answerArr){
-    buttonA.innerText = answerArr[0]
-    buttonB.innerText = answerArr[1]
-    buttonC.innerText = answerArr[2]
-    buttonD.innerText = answerArr[3]
-}
-
-// return 4 nonidentical incorrect answers using wrongsArr argument
-// 4 because one might be identical to correct answer
-function fillCurrentWrongAnswers(wrongsArr){
-    function rFour (newArr) {
-        if (newArr.length == 4) {
+// return `amount` of randomly selected, nonidentical items from `myArr`
+function returnRandomNonidenticalItems(amount, myArr) {
+    function rNon (newArr) {
+        if (newArr.length == amount) {
             return newArr
         } else {
-            let randIndex = Math.floor(Math.random() * wrongsArr.length)
-            let randItem = wrongsArr[randIndex]
+            let randIndex = Math.floor(Math.random() * myArr.length)
+            let randItem = myArr[randIndex]
             if (newArr.includes(randItem) == false) {
                 newArr.push(randItem)
-                return rFour(newArr)
+                return rNon(newArr)
             } else if (newArr.includes(randItem) == true) {
-                return rFour(newArr) 
-            } else {
-                console.log("something went wrong")
+                return rNon(newArr)
             }
         }
     }
-    return rFour([])
+    return rNon([])
+}
+
+function gameOver(){
+    currentImage.src = "img/raintree.gif"
+    currentQuestion.innerText = "Game Over"
+
+    // remove buttons except for reset
 }
 
 // load initial question to begin
-newQuestion()
+newQuestion(tenQuestions.pop())
