@@ -18,7 +18,7 @@ No installation necessary. Just visit https://dataneon.github.io/project1/
 * As a user, I want to see plants of all types.
 
 ## Wireframes
-![image of proposal wireframe](wireframe.png)
+![image of proposal wireframe](/img/wireframe.png)
 
 ## Challenges
 For a while, the game was forming a stack of previous answers and responses that were appearing in `alert`s, so that by Question 5, the user would be getting `alert`s about the previous 4 questions. This was solved by (1) getting rid of `alert` in favor of a header, and (2) rewritting the `eventlistener` that listens for the user's clicks.
