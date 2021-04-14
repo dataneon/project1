@@ -12,6 +12,7 @@ body {
     height: 50%;
     font-family: 'Exo', sans-serif;
     border-radius: 8px;
+    font-size: 15px;
 }
 
 .answerButtons {
